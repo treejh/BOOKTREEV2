@@ -1,6 +1,7 @@
 package com.example.booktree.domain.maincategory.entity;
 
 
+import com.example.booktree.domain.book.entity.Book;
 import com.example.booktree.global.auditable.Auditable;
 import com.example.booktree.domain.post.entity.Post;
 import jakarta.persistence.CascadeType;
@@ -43,6 +44,11 @@ public class MainCategory extends Auditable {
 
     @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.REMOVE, orphanRemoval = false)
     List<Post>postList = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.REMOVE, orphanRemoval = false)
+    List<Book> bookList = new ArrayList<>();
+
 
 
 

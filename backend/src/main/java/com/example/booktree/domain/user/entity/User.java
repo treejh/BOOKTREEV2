@@ -1,6 +1,7 @@
 package com.example.booktree.domain.user.entity;
 
 
+import com.example.booktree.domain.book.entity.Book;
 import com.example.booktree.global.auditable.Auditable;
 import com.example.booktree.domain.blog.entity.Blog;
 import com.example.booktree.domain.category.entity.Category;
@@ -88,6 +89,10 @@ public class User extends Auditable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true,  fetch = FetchType.LAZY)
     List<LikeReply> likeReplyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true,  fetch = FetchType.LAZY)
+    List<Book> bookList = new ArrayList<>();
+
 
 
 
