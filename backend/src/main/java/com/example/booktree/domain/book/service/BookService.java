@@ -14,10 +14,14 @@ import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
 
@@ -26,6 +30,7 @@ public class BookService {
     private final MainCategoryRepository mainCategoryRepository;
     private final ImageService imageService;
 
+    @Transactional
     public Book createBook(BookRequestDto bookRequestDto){
         User loingUser = userService.findById(tokenService.getIdFromToken());
         MainCategory mainCategory = mainCategoryRepository.findById(bookRequestDto.getMainCategoryId())
