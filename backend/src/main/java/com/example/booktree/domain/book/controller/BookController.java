@@ -2,6 +2,7 @@ package com.example.booktree.domain.book.controller;
 
 
 import com.example.booktree.domain.book.dto.request.BookRequestDto;
+import com.example.booktree.domain.book.dto.response.BookResponseDto;
 import com.example.booktree.domain.book.service.BookService;
 import com.example.booktree.global.utils.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +40,20 @@ public class BookController {
         ApiResponse apiResponse = ApiResponse.of(HttpStatus.OK.value(),"책 생성 성공");
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/{bookId}")
+    @Operation(
+            summary = "책 단권 조회 ",
+            description = "유저가 보유한 책을 조회 합니다. "
+    )
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity getBookById(@Valid @PathVariable Long bookId) {
+        BookResponseDto bookResponseDto = new BookResponseDto(bookService.getBookById(bookId));
+        ApiResponse apiResponse = ApiResponse.of(HttpStatus.OK.value(),"책 조회 성공",bookResponseDto);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
 
 
 

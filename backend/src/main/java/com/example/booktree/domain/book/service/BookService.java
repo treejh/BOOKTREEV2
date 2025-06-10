@@ -45,5 +45,10 @@ public class BookService {
         return book;
     }
 
+    public Book getBookById(Long bookId){
+        return bookRepository.findById(bookId)
+                .orElseThrow(()->new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+    }
+
 
 }
