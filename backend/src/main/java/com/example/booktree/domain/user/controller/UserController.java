@@ -15,7 +15,7 @@ import com.example.booktree.domain.user.dto.response.UserProfileResponseDto;
 import com.example.booktree.domain.user.dto.response.UserResponseDto;
 import com.example.booktree.domain.user.entity.User;
 import com.example.booktree.domain.user.service.UserService;
-import com.example.booktree.global.utils.dto.ApiResponseDto;
+import com.example.booktree.global.utils.dto.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -202,7 +202,7 @@ public class UserController {
     @PostMapping("/find/email/phone")
     public ResponseEntity findEmailByPhoneNumber(@Valid @RequestBody UserPhoneNumberRequestDto userPhoneNumberRequestDto) {
         String email = userService.findEmailByPhoneNumber(userPhoneNumberRequestDto) ;
-        ApiResponseDto response = ApiResponseDto.builder()
+        ApiResponse response = ApiResponse.builder()
                 .data(email)
                 .message("이메일 입니다.")
                 .build();
@@ -213,7 +213,7 @@ public class UserController {
     @PostMapping("/find/pw/phone")
     public ResponseEntity findPwByPhoneNumber(@Valid @RequestBody UserPhoneNumberRequestDto userPhoneNumberRequestDto) {
         String password = userService.findPasswordByPhoneNumber(userPhoneNumberRequestDto.getPhoneNumber()) ;
-        ApiResponseDto response = ApiResponseDto.builder()
+        ApiResponse response = ApiResponse.builder()
                 .data(password)
                 .message("임시 비밀번호 입니다.")
                 .build();
@@ -242,7 +242,7 @@ public class UserController {
     @PostMapping("/find/pw/emailAndPhone")
     public ResponseEntity findPwByEmailAndPhone(@Valid @RequestBody UserPasswordRequestDto.FindPwByEmailAndPhone findPwByEmailAndPhone) {
         String password = userService.findPasswordByEmailAndPhone(findPwByEmailAndPhone) ;
-        ApiResponseDto response = ApiResponseDto.builder()
+        ApiResponse response = ApiResponse.builder()
                 .data(password)
                 .message("임시 비밀번호 입니다.")
                 .build();

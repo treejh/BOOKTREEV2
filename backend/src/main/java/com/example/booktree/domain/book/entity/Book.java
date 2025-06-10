@@ -50,7 +50,6 @@ public class Book {
     private String image;
 
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "transcation_type",nullable = false)
     private TransactionType transactionType; // Enum 타입이 더 적합할 수 있음
