@@ -69,7 +69,7 @@ public class BookServiceTest {
         dto.setAuthor("테스트 저자");
         dto.setTransactionType(TransactionType.SELL);
 
-        // 이미지 파일은 MultipartFile이라서 보통 MockMultipartFile로 만듦 (필요한 경우)
+        // 이미지 파일은 MultipartFile이라서 보통 MockMultipartFile로 만듦
         MockMultipartFile mockImage = new MockMultipartFile(
                 "image",
                 "test-image.jpg",
@@ -137,6 +137,9 @@ public class BookServiceTest {
 
         assertEquals(ExceptionCode.BOOK_NOT_FOUND, exception.getExceptionCode());
     }
+
+
+
 
 
 }

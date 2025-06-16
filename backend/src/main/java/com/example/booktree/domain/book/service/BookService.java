@@ -14,8 +14,11 @@ import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +57,12 @@ public class BookService {
     public Book getBookById(Long bookId){
         return bookRepository.findById(bookId)
                 .orElseThrow(()->new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+    }
+
+
+    public Page<Book> getBookList(Pageable pageable){
+        User user = userService.findById(tokenService.getIdFromToken());
+        return bookRepository.findAllByUser(user,pageable);
     }
 
 
