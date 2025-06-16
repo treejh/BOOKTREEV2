@@ -56,8 +56,6 @@ public class BookServiceTest {
     @DisplayName("사용자가 보유한 책 생성")
     void createBook_shouldCreateBookSuccessfully(){
         //given 테스트에 사용할 더미데이터 생성
-        Long userId = 1L;
-        Long mainCategory=1L;
         Long userIdFromToken = 1L;
         Long mainCategoryId = 1L;
         User mockUser = new User();
@@ -99,8 +97,6 @@ public class BookServiceTest {
 
         //정확히 1번 호출되었는지 확인
         verify(bookRepository, times(1)).save(any(Book.class));
-
-
     }
 
 }
