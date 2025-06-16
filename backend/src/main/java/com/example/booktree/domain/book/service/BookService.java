@@ -9,6 +9,7 @@ import com.example.booktree.domain.maincategory.repository.MainCategoryRepositor
 import com.example.booktree.domain.maincategory.service.MainCategortService;
 import com.example.booktree.domain.user.entity.User;
 import com.example.booktree.domain.user.service.UserService;
+import com.example.booktree.enums.TransactionStatus;
 import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
@@ -40,7 +41,7 @@ public class BookService {
         Book book = Book.builder()
                 .mainCategory(mainCategory)
                 .image(image)
-                .transactionStatus(bookRequestDto.getTransactionStatus())
+                .transactionStatus(TransactionStatus.AVAILABLE)
                 .transactionType(bookRequestDto.getTransactionType())
                 .user(loingUser)
                 .name(bookRequestDto.getName())

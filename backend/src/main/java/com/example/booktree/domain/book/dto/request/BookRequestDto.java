@@ -23,9 +23,6 @@ public class BookRequestDto {
     private String author;
 
     @NotNull
-    private TransactionStatus transactionStatus;
-
-    @NotNull
     private TransactionType transactionType;
 
     private MultipartFile image;
