@@ -2,6 +2,7 @@ package com.example.booktree.domain.book.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,8 @@ import com.example.booktree.domain.user.entity.User;
 import com.example.booktree.domain.user.service.UserService;
 import com.example.booktree.enums.TransactionStatus;
 import com.example.booktree.enums.TransactionType;
+import com.example.booktree.global.exception.BusinessLogicException;
+import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
 import java.util.Optional;
@@ -98,5 +101,42 @@ public class BookServiceTest {
         //정확히 1번 호출되었는지 확인
         verify(bookRepository, times(1)).save(any(Book.class));
     }
+
+
+    @Test
+    @DisplayName("책 ID로 책을 정상적으로 조회한다")
+    void getBookById_shouldReturnBook() {
+        // given
+        Long bookId = 1L;
+        Book book = new Book();
+        book.setId(bookId);
+        book.setName("테스트 책");
+
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+
+        // when
+        Book result = bookService.getBookById(bookId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(bookId, result.getId());
+        assertEquals("테스트 책", result.getName());
+    }
+
+    @Test
+    @DisplayName("책 ID로 조회했을 때 존재하지 않으면 예외를 던진다")
+    void getBookById_shouldThrowException_whenBookNotFound() {
+        // given
+        Long bookId = 999L;
+        when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
+
+        // when & then
+        BusinessLogicException exception = assertThrows(BusinessLogicException.class, () -> {
+            bookService.getBookById(bookId);
+        });
+
+        assertEquals(ExceptionCode.BOOK_NOT_FOUND, exception.getExceptionCode());
+    }
+
 
 }
