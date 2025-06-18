@@ -2,6 +2,7 @@ package com.example.booktree.domain.book.service;
 
 
 import com.example.booktree.domain.book.dto.request.BookRequestDto;
+import com.example.booktree.domain.book.dto.request.BookUpdateRequestDto;
 import com.example.booktree.domain.book.entity.Book;
 import com.example.booktree.domain.book.repository.BookRepository;
 import com.example.booktree.domain.maincategory.entity.MainCategory;
@@ -15,6 +16,7 @@ import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -64,6 +66,7 @@ public class BookService {
         User user = userService.findById(tokenService.getIdFromToken());
         return bookRepository.findAllByUser(user,pageable);
     }
+
 
 
 

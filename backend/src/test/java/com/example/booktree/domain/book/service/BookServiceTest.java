@@ -145,8 +145,4 @@ public class BookServiceTest {
         assertEquals(ExceptionCode.BOOK_NOT_FOUND, exception.getExceptionCode());
     }
 
-
-
-
-
 }

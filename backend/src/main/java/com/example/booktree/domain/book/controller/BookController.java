@@ -2,6 +2,7 @@ package com.example.booktree.domain.book.controller;
 
 
 import com.example.booktree.domain.book.dto.request.BookRequestDto;
+import com.example.booktree.domain.book.dto.request.BookUpdateRequestDto;
 import com.example.booktree.domain.book.dto.response.BookResponseDto;
 import com.example.booktree.domain.book.entity.Book;
 import com.example.booktree.domain.book.service.BookService;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,6 +77,9 @@ public class BookController {
         ApiResponse apiResponse = ApiResponse.of(HttpStatus.OK.value(),"모든 책 조회 성공",bookResponseDto);
         return ResponseEntity.ok(apiResponse);
     }
+
+
+
 
 
 
