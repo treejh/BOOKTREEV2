@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,7 @@ import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +76,7 @@ public class BookServiceTest {
         dto.setAuthor("테스트 저자");
         dto.setTransactionType(TransactionType.SELL);
 
-        // 이미지 파일은 MultipartFile이라서 보통 MockMultipartFile로 만듦 (필요한 경우)
+        // 이미지 파일은 MultipartFile이라서 보통 MockMultipartFile로 만듦
         MockMultipartFile mockImage = new MockMultipartFile(
                 "image",
                 "test-image.jpg",
@@ -137,6 +144,5 @@ public class BookServiceTest {
 
         assertEquals(ExceptionCode.BOOK_NOT_FOUND, exception.getExceptionCode());
     }
-
 
 }
