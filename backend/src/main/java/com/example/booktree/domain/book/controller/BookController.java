@@ -78,6 +78,21 @@ public class BookController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PatchMapping("/{bookId}")
+    @Operation(
+            summary = "사용자가 보유한 책 정보를 수정합니다. ",
+            description = "사용자가 보유한 책 정보를 수정합니다. "
+    )
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity updateBookInfo(@Valid @RequestBody BookUpdateRequestDto bookUpdateRequestDto,
+                                         @PathVariable Long bookId) {
+        // ✅ 생성일 기준 내림차순 정렬
+        BookResponseDto bookResponseDto = new BookResponseDto(bookService.updateBook(bookUpdateRequestDto,bookId));
+        ApiResponse apiResponse = ApiResponse.of(HttpStatus.OK.value(),"책 정보 수정 성공",bookResponseDto);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
 
 
 

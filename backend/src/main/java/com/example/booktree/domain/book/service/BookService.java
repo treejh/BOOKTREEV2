@@ -67,6 +67,42 @@ public class BookService {
         return bookRepository.findAllByUser(user,pageable);
     }
 
+    @Transactional
+    public Book updateBook(BookUpdateRequestDto bookUpdateRequestDto, Long bookId) {
+        Book book = findBookById(bookId);
+
+        // ✅ 1. 이미지가 있는 경우 기존 이미지 삭제 후 새 이미지 저장
+        Optional.ofNullable(bookUpdateRequestDto.getImage()).ifPresent(image -> {
+            imageService.deleteFile(book.getImage()); // 기존 이미지 삭제
+            book.setImage(imageService.saveUserImage(image)); // 새 이미지 저장 및 설정
+        });
+
+        // ✅ 2. 각 필드가 null이 아닐 경우만 업데이트
+        Optional.ofNullable(bookUpdateRequestDto.getAuthor()).ifPresent(book::setAuthor);
+
+        Optional.ofNullable(bookUpdateRequestDto.getMainCategoryId()).ifPresent(categoryId -> {
+            book.setMainCategory(
+                    mainCategoryRepository.findById(categoryId)
+                            .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUND))
+            );
+        });
+
+        Optional.ofNullable(bookUpdateRequestDto.getName()).ifPresent(book::setName);
+        Optional.ofNullable(bookUpdateRequestDto.getTransactionType()).ifPresent(book::setTransactionType);
+        Optional.ofNullable(bookUpdateRequestDto.getTransactionStatus()).ifPresent(book::setTransactionStatus);
+
+        // ✅ 3. 변경된 Book 저장 후 반환
+        return bookRepository.save(book);
+    }
+
+
+    public Book findBookById(Long id){
+        return bookRepository.findById(id).orElseThrow(
+                ()-> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUNT)
+        );
+
+    }
+
 
 
 
