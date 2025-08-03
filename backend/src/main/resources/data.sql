@@ -1,8 +1,8 @@
-INSERT INTO ROLES (id, role, created_at, last_modified_AT)
+INSERT INTO roles (id, role, created_at, last_modified_AT)
 VALUES (1, 'USER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
-INSERT INTO ROLES (id, role, created_at, last_modified_AT)
+INSERT INTO roles (id, role, created_at, last_modified_AT)
 VALUES (2, 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 사용자 추가

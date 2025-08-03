@@ -15,8 +15,10 @@ import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.global.image.service.ImageService;
 import com.example.booktree.global.security.jwt.service.TokenService;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -70,6 +72,7 @@ public class BookService {
     @Transactional
     public Book updateBook(BookUpdateRequestDto bookUpdateRequestDto, Long bookId) {
         Book book = findBookById(bookId);
+
 
         // ✅ 1. 이미지가 있는 경우 기존 이미지 삭제 후 새 이미지 저장
         Optional.ofNullable(bookUpdateRequestDto.getImage()).ifPresent(image -> {

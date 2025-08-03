@@ -52,7 +52,7 @@ export default function Home() {
             <div className="w-full px-0 py-4">
                 <div className="w-full h-110 rounded-lg overflow-hidden mb-11">
                     <img
-                        src="https://juseyo.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A5%E1%84%8C%E1%85%A1%E1%86%BC.png"
+                        src="https://yetdas3.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A5%E1%84%8C%E1%85%A1%E1%86%BC.png"
                         alt="도서관 이미지"
                         className="w-full h-full object-cover"
                     />

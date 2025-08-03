@@ -30,7 +30,7 @@ export default function Header() {
             <div className="w-full px-1 py-3 flex items-center justify-between">
                 <Link href="/" className="flex items-center pl-5 cursor-pointer">
                     <img
-                        src="https://juseyo.s3.ap-northeast-2.amazonaws.com/BookTreeLogo.png"
+                        src="https://yetdas3.s3.ap-northeast-2.amazonaws.com/BookTreeLogo.png"
                         alt="책 아이콘"
                         className="w-9 h-9 mr-2"
                     />
