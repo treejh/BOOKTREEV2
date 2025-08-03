@@ -6,3 +6,5 @@ services:
       context: ./k6
       dockerfile: Dockerfile
     container_name: k6-test
+    volumes:
+      - ./k6:/app

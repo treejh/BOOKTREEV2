@@ -119,7 +119,7 @@ public class S3Uploader {
                                 .map(MultipartFile.class::cast)
                                 .findFirst()
                                 .orElse(null);
-                        //System.out.println("!! name : " + upload.getOriginalFilename());
+                        System.out.println("!! name : " + upload.getOriginalFilename());
                         try {
                             uploadFile(upload);
                         } catch (IOException e) {

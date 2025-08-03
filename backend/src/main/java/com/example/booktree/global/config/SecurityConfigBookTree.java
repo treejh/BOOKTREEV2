@@ -44,7 +44,8 @@ public class SecurityConfigBookTree {
                                 "/h2-console/**",
                                 "/api/users",
                                 "/api/v1/users/find/**",
-                                "/api/v1/users/get/profile/**"
+                                "/api/v1/users/get/profile/**",
+                                "/api/images/**"
 
                         ).permitAll()
                         //무중단 배포 추가, 이메일 추가

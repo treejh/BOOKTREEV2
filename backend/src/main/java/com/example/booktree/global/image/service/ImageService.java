@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ImageService {
 
     private final ImageRepository imageRepository;
@@ -85,6 +87,7 @@ public class ImageService {
     public List<Image> uploadPostImage(Long postId, List<MultipartFile> multipartFiles) {
         Post post = postRepository.findById(postId).get();
         List<Image> postImageList = post.getImageList();
+
 
 
         //이미지 객체에서 Url만 추출
