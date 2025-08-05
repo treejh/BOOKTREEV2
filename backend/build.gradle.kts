@@ -84,6 +84,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito:mockito-junit-jupiter")
 
+    implementation("org.redisson:redisson-spring-boot-starter:3.27.2")
+
 }
 
 tasks.withType<Test> {

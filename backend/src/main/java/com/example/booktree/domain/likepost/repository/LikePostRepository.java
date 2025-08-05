@@ -5,6 +5,7 @@ import com.example.booktree.domain.post.entity.Post;
 import com.example.booktree.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,6 +33,11 @@ public interface LikePostRepository extends JpaRepository<LikePost, Long> {
     // 사용자가 좋아요를 누른 게시글 목록 가져오기
     @Query("SELECT lp.post FROM LikePost lp WHERE lp.user.id = :userId")
     Page<Post> findLikedPostsByUser(@Param("userId") Long userId, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"post", "post.user", "post.imageList"})
+    @Query("SELECT lp FROM LikePost lp WHERE lp.user.id = :userId")
+    Page<LikePost> findByUserId(@Param("userId") Long userId, Pageable pageable);
+
 
     @Transactional
     @Modifying

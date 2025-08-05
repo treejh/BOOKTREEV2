@@ -1,5 +1,6 @@
 package com.example.booktree.domain.post.controller;
 
+import com.example.booktree.domain.likepost.entity.LikePost;
 import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 
@@ -293,8 +294,8 @@ public class PostController {
             @RequestParam(name="size", defaultValue = "8") int size
     ) {
 
-        Page<Post> posts = postService.getPostsFromUserLike(PageRequest.of(page -1, size, Sort.by(Sort.Direction.DESC, "createdAt")));
-        Page<PostFollowingPageDto> response = posts.map(PostFollowingPageDto::new);
+        //age<LikePost> posts = postService.getPostsFromUserLike(PageRequest.of(page -1, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+        Page<PostFollowingPageDto> response = postService.getLikedPostsWithCache(PageRequest.of(page -1, size, Sort.by(Sort.Direction.DESC, "createdAt")));
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

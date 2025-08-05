@@ -46,7 +46,6 @@ public class SecurityConfigBookTree {
                                 "/api/v1/users/find/**",
                                 "/api/v1/users/get/profile/**",
                                 "/api/images/**"
-
                         ).permitAll()
                         //무중단 배포 추가, 이메일 추가
                         .requestMatchers("/actuator/health","/api/v1/email/**")

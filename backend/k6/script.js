@@ -1,42 +1,52 @@
 import http from 'k6/http';
-import { sleep, check } from 'k6';
+import { check, sleep } from 'k6';
 
-// ✅ init 단계에서 미리 파일 열기 (전역 스코프)
-const file1 = open('/app/test1.png', 'b');
-const file2 = open('/app/test2.png', 'b');
-const file3 = open('/app/test3.png', 'b');
-
-// 파일 배열
-const imageFiles = [
-    { name: 'test1.png', content: file1 },
-    { name: 'test2.png', content: file2 },
-    { name: 'test3.png', content: file3 },
-];
-
-// 테스트 옵션
-export let options = {
-    vus: 100,
-    duration: '10s',
+export const options = {
+    stages: [
+        { duration: '10s', target: 100 },
+        { duration: '10s', target: 300 },
+        { duration: '10s', target: 500 },
+        { duration: '10s', target: 1000 },
+        { duration: '10s', target: 0 }, // 종료
+    ],
 };
 
-export default function () {
-    // 랜덤 이미지 선택
-    const randomIndex = Math.floor(Math.random() * imageFiles.length);
-    const image = imageFiles[randomIndex];
+export function setup() {
+    const loginRes = http.post('http://host.docker.internal:8080/api/v1/users/login', JSON.stringify({
+        email: 'test@gmail.com',
+        password: 'test1234@@',
+    }), {
+        headers: { 'Content-Type': 'application/json' }
+    });
 
-    const data = {
-        postId: '5',
-        'images[0]': http.file(file1, 'test1.png'),
-        'images[1]': http.file(file2, 'test2.png'),
-        'images[2]': http.file(file3, 'test3.png'),
-    };
+    check(loginRes, {
+        '✅ 로그인 성공': (res) => res.status === 200,
+    });
 
+    // ✅ 헤더에서 Authorization 추출
+    const rawAuthHeader = loginRes.headers['Authorization'] || loginRes.headers['authorization'];
+    const token = rawAuthHeader?.replace('Bearer ', '');
 
+    check(token, {
+        '✅ 토큰 포함 (헤더 기반)': (t) => t !== undefined && t.length > 10,
+    });
 
-    const res = http.patch('http://host.docker.internal:8080/api/images/post/update', data);
+    return { token };
+}
+
+export default function (data) {
+    const page = Math.floor(Math.random() * 3) + 1;
+    const url = `http://host.docker.internal:8080/api/v1/posts/get/likePost?page=${page}&size=8`;
+
+    const res = http.get(url, {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    });
 
     check(res, {
-        '✅ 상태 코드 200': (r) => r.status === 200,
+        '✅ 조회 응답 성공': (r) => r.status === 200,
+        '✅ 응답에 content 포함': (r) => r.body.includes('content'),
     });
 
     sleep(1);

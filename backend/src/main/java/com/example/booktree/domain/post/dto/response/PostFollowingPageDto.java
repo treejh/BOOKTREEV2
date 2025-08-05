@@ -1,5 +1,6 @@
 package com.example.booktree.domain.post.dto.response;
 
+import com.example.booktree.domain.likepost.entity.LikePost;
 import com.example.booktree.domain.post.entity.Post;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -18,6 +19,21 @@ public class PostFollowingPageDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    public PostFollowingPageDto(LikePost likePost){
+        Post post = likePost.getPost();
+        this.postId = post.getId();
+        this.title = post.getTitle();
+        this.viewCount = post.getView();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
+        this.username = post.getUser().getUsername();
+        if (post.getImageList() != null && !post.getImageList().isEmpty()) {
+            this.imageUrl = post.getImageList().get(0).getImageUrl();
+        } else {
+            this.imageUrl = null;
+        }
+    }
+
     public PostFollowingPageDto(Post post){
         this.postId = post.getId();
         this.title = post.getTitle();
@@ -30,7 +46,6 @@ public class PostFollowingPageDto {
         } else {
             this.imageUrl = null;
         }
-
     }
 
 }

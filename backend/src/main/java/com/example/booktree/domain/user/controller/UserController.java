@@ -170,10 +170,9 @@ public class UserController {
 
         response.addCookie(accessTokenCookie);
 
-
         UserLoginResponseDto userLoginResponseDto  = new UserLoginResponseDto(user,accessToken);
 
-
+        response.setHeader("Authorization", "Bearer " + accessToken);
         return ResponseEntity.ok(userLoginResponseDto);
 
     }

@@ -5,6 +5,8 @@ import com.example.booktree.domain.blog.service.BlogService;
 import com.example.booktree.domain.category.entity.Category;
 import com.example.booktree.domain.category.repository.CategoryRepository;
 import com.example.booktree.domain.comment.repository.CommentRepository;
+import com.example.booktree.domain.likepost.entity.LikePost;
+import com.example.booktree.domain.post.dto.response.PostFollowingPageDto;
 import com.example.booktree.global.exception.BusinessLogicException;
 import com.example.booktree.global.exception.ExceptionCode;
 import com.example.booktree.domain.follow.service.FollowService;
@@ -25,6 +27,7 @@ import com.example.booktree.domain.user.entity.User;
 import com.example.booktree.domain.user.service.UserService;
 
 //import jakarta.transaction.Transactional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +36,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.booktree.global.utils.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -70,6 +76,8 @@ public class PostService {
     private final BlogService blogService;
     private final FollowService followService;
     private final CommentRepository commentRepository;
+
+    private final RedissonClient redissonClient;
 
 
 
@@ -368,9 +376,9 @@ public class PostService {
 
     //사용자가 좋아요 누른 게시글 가져오기
     @Transactional
-    public Page<Post> getPostsFromUserLike(Pageable pageable){
+    public Page<LikePost> getPostsFromUserLike(Pageable pageable){
         Long userId = tokenService.getIdFromToken();
-        Page<Post> likePostList = likePostRepository.findLikedPostsByUser(userId,pageable);
+        Page<LikePost> likePostList = likePostRepository.findByUserId(userId,pageable);
 
         if (likePostList.isEmpty()) {
             return Page.empty(pageable);
@@ -379,6 +387,29 @@ public class PostService {
         return likePostList;
 
     }
+
+
+    public Page<PostFollowingPageDto> getLikedPostsWithCache(Pageable pageable) {
+        Long userId = tokenService.getIdFromToken();
+        String cacheKey = String.format("likePost:user:%d:page:%d:size:%d", userId, pageable.getPageNumber(), pageable.getPageSize());
+        RBucket<List<PostFollowingPageDto>> bucket = redissonClient.getBucket(cacheKey);
+
+        List<PostFollowingPageDto> dtoList;
+
+        if (bucket.isExists()) {
+            dtoList = bucket.get();
+        } else {
+            Page<LikePost> likePosts = likePostRepository.findByUserId(userId, pageable);
+            dtoList = likePosts.stream()
+                    .map(PostFollowingPageDto::new)
+                    .toList();
+            bucket.set(dtoList, 10, TimeUnit.MINUTES);
+        }
+
+        // ✅ Page로 다시 포장
+        return new PageImpl<>(dtoList, pageable, dtoList.size());
+    }
+
 
     // 게시글 좋아요에 service주입용 추가
     public Post findById(Long postId) {
